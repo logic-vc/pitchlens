@@ -1,0 +1,530 @@
+/* ─────────────────────────────────────────────
+   index.css  —  PitchLens 글로벌 스타일
+   다크 프로 스튜디오 테마
+───────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap');
+
+/* ── 디자인 토큰 ── */
+:root {
+  --bg-base:      #0A0A0F;
+  --bg-elevated:  #111118;
+  --bg-card:      #16161F;
+  --bg-card-2:    #1C1C27;
+  --border:       rgba(255, 255, 255, 0.07);
+  --border-focus: rgba(0, 245, 255, 0.4);
+
+  --text-primary: #E8E8F0;
+  --text-muted:   #5A5A6E;
+  --text-dim:     #3A3A4E;
+
+  --cyan:    #00F5FF;
+  --purple:  #A855F7;
+  --green:   #2ED573;
+  --red:     #FF4757;
+  --gold:    #FFD700;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  --transition: 150ms ease;
+}
+
+/* ── 리셋 ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* ── 앱 레이아웃 ── */
+.app {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 52px 1fr 68px;
+}
+
+/* ── 헤더 ── */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  user-select: none;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-text {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--cyan);
+  letter-spacing: -0.3px;
+}
+
+.held-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--purple);
+  background: rgba(168, 85, 247, 0.15);
+  border: 1px solid rgba(168, 85, 247, 0.35);
+  padding: 2px 8px;
+  border-radius: 999px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.error-msg {
+  font-size: 12px;
+  color: var(--red);
+  max-width: 280px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  padding: 5px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 500;
+  transition: all var(--transition);
+}
+.btn-ghost:hover:not(:disabled) {
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+.btn-ghost:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* ── 메인 ── */
+.app-main {
+  display: grid;
+  grid-template-columns: 210px 1fr;
+  overflow: hidden;
+}
+
+/* ── 사이드 패널 ── */
+.side-panel {
+  background: var(--bg-elevated);
+  border-right: 1px solid var(--border);
+  padding: 20px 14px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.pitch-display {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* 음계 히어로 */
+.note-hero {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  transition: color 80ms ease;
+  padding: 0 4px;
+  width: 110px; /* 고정 너비 확보 */
+  flex-shrink: 0;
+}
+
+.note-name {
+  font-size: 72px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  line-height: 1;
+  display: inline-block;
+  min-width: 1.1em; /* # 유무와 상관없이 동일 공간 유지 */
+}
+
+.note-octave {
+  font-size: 32px;
+  font-weight: 400;
+  font-family: 'JetBrains Mono', monospace;
+  opacity: 0.6;
+  padding-bottom: 4px;
+}
+
+/* 정보 카드 */
+.info-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.session-card {
+  position: relative;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+}
+
+.btn-tiny-reset {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  transition: all var(--transition);
+}
+
+.btn-tiny-reset:hover:not(:disabled) {
+  background: rgba(255, 71, 87, 0.1);
+  border-color: rgba(255, 71, 87, 0.4);
+  color: var(--red);
+}
+
+.btn-tiny-reset:disabled {
+  opacity: 0.2;
+  cursor: not-allowed;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  color: var(--text-muted);
+}
+
+.info-value {
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.mono {
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.cents-value {
+  font-size: 20px;
+  font-weight: 700;
+  transition: color 80ms ease;
+}
+
+.divider {
+  height: 1px;
+  background: var(--border);
+}
+
+/* Cents 바 */
+.cents-bar-wrap {
+  position: relative;
+  height: 4px;
+  background: var(--bg-card-2);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.cents-bar-fill {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  border-radius: 2px;
+  transition: width 60ms ease, background 80ms ease;
+  min-width: 2px;
+}
+
+.cents-bar-center {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 100%;
+  background: rgba(255,255,255,0.3);
+}
+
+/* 세션 범위 */
+.session-range-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.session-note {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.session-note.low  { color: var(--purple); }
+.session-note.high { color: var(--cyan); }
+
+.session-arrow { color: var(--text-muted); font-size: 12px; }
+
+.session-span {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ── Canvas 영역 ── */
+.canvas-area {
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-base);
+}
+
+/* 비활성 오버레이 */
+.idle-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 10, 15, 0.75);
+  backdrop-filter: blur(6px);
+  z-index: 10;
+}
+
+.idle-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.idle-icon {
+  font-size: 40px;
+  opacity: 0.6;
+}
+
+.idle-text {
+  font-size: 14px;
+  color: var(--text-muted);
+  max-width: 260px;
+}
+
+.idle-error {
+  font-size: 12px;
+  color: var(--red);
+  max-width: 260px;
+}
+
+/* ── 푸터 ── */
+.app-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: var(--bg-elevated);
+  border-top: 1px solid var(--border);
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* 시작/중지 버튼 */
+.btn-primary {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 28px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  background: var(--cyan);
+  color: #000;
+  transition: all var(--transition);
+  letter-spacing: 0.2px;
+}
+.btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+.btn-primary:active { transform: translateY(0); }
+
+.btn-primary.is-stop {
+  background: var(--red);
+  color: #fff;
+}
+
+/* Hold 버튼 */
+.btn-secondary {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 20px;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 600;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  transition: all var(--transition);
+}
+.btn-secondary:hover:not(:disabled) {
+  border-color: var(--purple);
+  color: var(--purple);
+}
+.btn-secondary:disabled {
+  opacity: 0.28;
+  cursor: not-allowed;
+}
+.btn-secondary.is-held {
+  background: rgba(168, 85, 247, 0.18);
+  border-color: var(--purple);
+  color: var(--purple);
+}
+
+.btn-icon { font-size: 12px; }
+
+.footer-hint {
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--text-muted);
+}
+
+/* ─────────────────────────────────────────────
+   반응형 (Mobile)
+───────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .app {
+    grid-template-rows: 48px 1fr 64px;
+  }
+
+  .app-main {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr; /* 상단 정보 / 하단 그래프 */
+  }
+
+  .side-panel {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 10px 12px;
+    overflow-y: visible;
+  }
+
+  .pitch-display {
+    flex-direction: row;
+    align-items: stretch; /* 높이 통일 */
+    justify-content: flex-start;
+    gap: 8px;
+    flex-wrap: nowrap; /* 한 줄 유지 */
+    overflow-x: auto; /* 넘칠 경우 가로 스크롤 */
+    padding-bottom: 8px;
+  }
+
+  /* 음계 히어로 축소 및 고정 */
+  .note-hero {
+    flex: 0 0 75px; /* 모바일 고정 너비 */
+    width: 75px;
+    padding: 0;
+  }
+  .note-name { 
+    font-size: 44px; 
+    min-width: 1.2em; 
+  }
+  .note-octave { font-size: 20px; }
+
+  /* 카드들을 고정 크기로 배치 */
+  .info-card {
+    flex: 0 0 145px; /* 모바일 카드 너비 고정 */
+    width: 145px;
+    padding: 8px 10px;
+    gap: 4px;
+  }
+
+  .info-label { font-size: 8px; letter-spacing: 1px; }
+  .info-value { font-size: 12px; }
+  .cents-value { font-size: 16px; }
+
+  .session-range-row { gap: 4px; }
+  .session-note { font-size: 14px; }
+  .session-span { font-size: 9px; }
+
+  .btn-tiny-reset {
+    padding: 2px 5px;
+    font-size: 7px;
+  }
+
+  /* 캔버스 영역 */
+  .canvas-area {
+    min-height: 200px;
+  }
+
+  /* 푸터 컨트롤 버튼 최적화 */
+  .btn-primary {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+  .btn-secondary {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .footer-hint {
+    display: block; /* 모바일에서도 표시 */
+    font-size: 8px; /* 아주 작게 표시하여 버튼과 공간 유지 */
+    opacity: 0.5;
+    text-align: right;
+  }
+}
+
+/* ── 스크롤바 숨기기 ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
