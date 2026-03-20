@@ -106,36 +106,89 @@ export function PitchCanvas({ pitchHistory, currentMidi, isActive }: Props) {
         ctx.fillRect(LABEL_WIDTH, y - 7, W - LABEL_WIDTH, 14)
       }
 
-      // ④ 피치 트레일
+      // ④ 피치 트레일 (부드러운 곡선)
       if (hist.length > 1) {
-        for (let i = 1; i < hist.length; i++) {
-          const prev = hist[i - 1]
-          const curr = hist[i]
+        ctx.save()
+        
+        // 라벨 영역(좌측)에 피치 트레일이 겹치지 않게 클리핑
+        ctx.beginPath()
+        ctx.rect(LABEL_WIDTH, 0, W - LABEL_WIDTH, H)
+        ctx.clip()
 
-          const xPrev = W - (now - prev.time) * PX_PER_SEC
-          const xCurr = W - (now - curr.time) * PX_PER_SEC
+        const pts = hist.map(p => ({
+          x: W - (now - p.time) * PX_PER_SEC,
+          y: midiToY(p.midi, MIN_MIDI, MAX_MIDI, H),
+          color: p.color,
+          midi: p.midi,
+          time: p.time
+        }))
 
-          // 화면 밖이면 스킵
-          if (xCurr < LABEL_WIDTH) continue
-          // 음이 크게 바뀌면(1옥타브+) 선으로 이어붙이지 않음
-          if (Math.abs(curr.midi - prev.midi) > 12) continue
+        ctx.lineCap     = 'round'
+        ctx.lineJoin    = 'round'
+        ctx.lineWidth   = 3
 
-          const yPrev = midiToY(prev.midi, MIN_MIDI, MAX_MIDI, H)
-          const yCurr = midiToY(curr.midi, MIN_MIDI, MAX_MIDI, H)
-
-          // 글로우 효과
-          ctx.shadowColor = curr.color
-          ctx.shadowBlur  = 10
-          ctx.strokeStyle = curr.color
-          ctx.lineWidth   = 3
-          ctx.lineCap     = 'round'
-          ctx.lineJoin    = 'round'
-          ctx.beginPath()
-          ctx.moveTo(Math.max(xPrev, LABEL_WIDTH), yPrev)
-          ctx.lineTo(xCurr, yCurr)
-          ctx.stroke()
-          ctx.shadowBlur = 0
+        const segments: typeof pts[] = []
+        let curSeg: typeof pts = [pts[0]]
+        
+        for (let i = 1; i < pts.length; i++) {
+          const prev = pts[i - 1]
+          const curr = pts[i]
+          
+          if (Math.abs(curr.midi - prev.midi) > 12 || (curr.time - prev.time) > 0.2) {
+            segments.push(curSeg)
+            curSeg = [curr]
+          } else {
+            curSeg.push(curr)
+          }
         }
+        if (curSeg.length > 0) segments.push(curSeg)
+
+        for (const seg of segments) {
+          if (seg.length < 2) continue
+          if (seg[seg.length - 1].x < 0) continue
+
+          for (let i = 1; i < seg.length; i++) {
+            const prev = seg[i - 1]
+            const curr = seg[i]
+            
+            if (curr.x < -50 && prev.x < -50) continue
+
+            ctx.shadowColor = curr.color
+            ctx.shadowBlur  = 10
+            ctx.strokeStyle = curr.color
+            
+            ctx.beginPath()
+
+            if (i === 1) {
+              const midX = (prev.x + curr.x) / 2
+              const midY = (prev.y + curr.y) / 2
+              ctx.moveTo(prev.x, prev.y)
+              ctx.lineTo(midX, midY)
+            } 
+            
+            if (i > 1) {
+              const prevPrev = seg[i - 2]
+              const startX = (prevPrev.x + prev.x) / 2
+              const startY = (prevPrev.y + prev.y) / 2
+              const endX = (prev.x + curr.x) / 2
+              const endY = (prev.y + curr.y) / 2
+              
+              ctx.moveTo(startX, startY)
+              ctx.quadraticCurveTo(prev.x, prev.y, endX, endY)
+            }
+
+            if (i === seg.length - 1) {
+              const midX = (prev.x + curr.x) / 2
+              const midY = (prev.y + curr.y) / 2
+              ctx.moveTo(midX, midY)
+              ctx.lineTo(curr.x, curr.y)
+            }
+
+            ctx.stroke()
+            ctx.shadowBlur = 0
+          }
+        }
+        ctx.restore()
       }
 
       // ⑤ 현재 위치 커서 (우측 끝 점선)

@@ -79,7 +79,7 @@ export function usePitchDetection(): PitchDetectionResult {
         setPitchHistory(prev => {
           const cutoff = now - HISTORY_SECONDS
           const next = prev.filter(p => p.time > cutoff)
-          next.push({ time: now, midi: info.midiNote, color: info.color })
+          next.push({ time: now, midi: info.midiFloat, color: info.color })
           return next
         })
       }

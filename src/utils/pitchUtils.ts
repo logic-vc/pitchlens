@@ -26,6 +26,7 @@ export interface NoteInfo {
   octave: number
   cents: number
   midiNote: number
+  midiFloat: number
   freq: number
   fullName: string
   color: string
@@ -51,6 +52,7 @@ export function hzToNoteInfo(freq: number): NoteInfo | null {
     octave,
     cents,
     midiNote,
+    midiFloat,
     freq,
     fullName: `${noteName}${octave}`,
     color: NOTE_COLORS[noteName],
