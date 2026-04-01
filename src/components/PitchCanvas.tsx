@@ -153,10 +153,22 @@ export function PitchCanvas({ pitchHistory, currentMidi, isActive }: Props) {
             
             if (curr.x < -50 && prev.x < -50) continue
 
+            // 페이드아웃 계산 (좌측 25% 구간에서 서서히 투명해짐)
+            const graphWidth = W - LABEL_WIDTH
+            const fadeStartX = LABEL_WIDTH + graphWidth * 0.25
+            let alpha = 1.0
+            
+            if (curr.x < fadeStartX) {
+              alpha = Math.max(0, (curr.x - LABEL_WIDTH) / (fadeStartX - LABEL_WIDTH))
+              // Ease-in-out 느낌을 위해 곡선 적용 (가속 페이드아웃)
+              alpha = alpha * alpha
+            }
+
+            ctx.globalAlpha = alpha
             ctx.shadowColor = curr.color
             ctx.shadowBlur  = 10
             ctx.strokeStyle = curr.color
-            
+
             ctx.beginPath()
 
             if (i === 1) {
@@ -188,6 +200,7 @@ export function PitchCanvas({ pitchHistory, currentMidi, isActive }: Props) {
             ctx.shadowBlur = 0
           }
         }
+        ctx.globalAlpha = 1.0 // 투명도 원상복구
         ctx.restore()
       }
 
