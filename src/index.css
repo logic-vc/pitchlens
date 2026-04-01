@@ -58,6 +58,7 @@ button {
 /* ── 앱 레이아웃 ── */
 .app {
   height: 100vh;
+  height: 100dvh; /* 모바일 브라우저 주소창(상하단 UI) 높이 대응 */
   display: grid;
   grid-template-rows: 52px 1fr 68px;
 }
