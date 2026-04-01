@@ -3,7 +3,7 @@
 //  좌측 정보 패널: 음계 / Hz / Cents / 세션 범위
 // ─────────────────────────────────────────────
 import type { NoteInfo } from '../utils/pitchUtils'
-import { midiToFullName } from '../utils/pitchUtils'
+import { midiToFullName, toKoreanNoteName } from '../utils/pitchUtils'
 
 interface Props {
   currentPitch:   NoteInfo | null
@@ -42,14 +42,22 @@ export function PitchDisplay({
   return (
     <div className="pitch-display">
 
-      {/* ── 현재 음계 (대형) ── */}
-      <div className="note-hero" style={{ color: noteColor }}>
-        <span className="note-name">
-          {currentPitch?.noteName ?? '—'}
-        </span>
-        <span className="note-octave">
-          {currentPitch ? currentPitch.octave : ''}
-        </span>
+      <div className="note-group">
+        {/* ── 현재 음계 (대형) ── */}
+        <div className="note-hero" style={{ color: noteColor }}>
+          <span className="note-name">
+            {currentPitch?.noteName ?? '—'}
+          </span>
+          <span className="note-octave">
+            {currentPitch ? currentPitch.octave : ''}
+          </span>
+        </div>
+        {/* ── 한글 음이름 ── */}
+        {currentPitch && (
+          <div className="note-korean" style={{ color: noteColor }}>
+            {toKoreanNoteName(currentPitch.noteName, currentPitch.octave)}
+          </div>
+        )}
       </div>
 
       {/* ── Hz + Cents ── */}

@@ -21,6 +21,33 @@ export const NOTE_COLORS: Record<string, string> = {
   'B':  '#FF85A1', // 핑크
 }
 
+// 한글 음이름 매핑 (도레미파솔라시)
+const KOREAN_NOTE_NAMES: Record<string, string> = {
+  'C':  '도',
+  'C#': '도#',
+  'D':  '레',
+  'D#': '레#',
+  'E':  '미',
+  'F':  '파',
+  'F#': '파#',
+  'G':  '솔',
+  'G#': '솔#',
+  'A':  '라',
+  'A#': '라#',
+  'B':  '시',
+}
+
+/**
+ * 영어 음이름+옥타브 → 한글 표기
+ * C5 → "3옥 도", C4 → "2옥 도", C3 → "1옥 도"
+ * 한국 보컬 교육 기준: 한글옥타브 = MIDI옥타브 - 2
+ */
+export function toKoreanNoteName(noteName: string, octave: number): string {
+  const korNote = KOREAN_NOTE_NAMES[noteName] ?? noteName
+  const korOctave = Math.max(0, octave - 2)
+  return `${korOctave}옥 ${korNote}`
+}
+
 export interface NoteInfo {
   noteName: string
   octave: number

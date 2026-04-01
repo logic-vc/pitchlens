@@ -160,6 +160,13 @@ button {
   gap: 14px;
 }
 
+.note-group {
+  display: flex;
+  flex-direction: column;
+  width: 110px; /* 고정 너비 확보 */
+  flex-shrink: 0;
+}
+
 /* 음계 히어로 */
 .note-hero {
   display: flex;
@@ -167,8 +174,6 @@ button {
   gap: 3px;
   transition: color 80ms ease;
   padding: 0 4px;
-  width: 110px; /* 고정 너비 확보 */
-  flex-shrink: 0;
 }
 
 .note-name {
@@ -186,6 +191,17 @@ button {
   font-family: 'JetBrains Mono', monospace;
   opacity: 0.6;
   padding-bottom: 4px;
+}
+
+/* 한글 음이름 서브 레이블 */
+.note-korean {
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  opacity: 0.65;
+  letter-spacing: 0.5px;
+  padding: 0 4px;
+  margin-top: -8px;
 }
 
 /* 정보 카드 */
@@ -467,10 +483,12 @@ button {
     padding-bottom: 8px;
   }
 
-  /* 음계 히어로 축소 및 고정 */
-  .note-hero {
+  /* 음계 히어로 (모음) 축소 및 고정 */
+  .note-group {
     flex: 0 0 75px; /* 모바일 고정 너비 */
     width: 75px;
+  }
+  .note-hero {
     padding: 0;
   }
   .note-name { 
@@ -478,6 +496,11 @@ button {
     min-width: 1.2em; 
   }
   .note-octave { font-size: 20px; }
+
+  .note-korean {
+    font-size: 10px;
+    margin-top: -4px;
+  }
 
   /* 카드들을 고정 크기로 배치 */
   .info-card {
